@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, loginTest } from '../store/slices/AccountSlice';
+import type { IUser } from '../model/AccountModel';
+import type { AppDispatch, RootState } from '../store/store';
 
 // 로그인 및 회원가입 컴포넌트
 export default function Login(){
@@ -15,12 +19,22 @@ export default function Login(){
   // 비밀번호 확인 표시/숨김 상태 (회원가입 시 사용)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
+  // 리덕스
+  let {user} = useSelector<RootState>((state) => state.auth);
+  let dispatch = useDispatch<AppDispatch>();
+
   // 로그인 버튼 클릭 핸들러
-  const handleLogin = (e: React.FormEvent) => {
+  async function handleLogin(e: React.FormEvent){   
     e.preventDefault(); // 폼 제출 기본 동작 방지
-    console.log('로그인 시도:', { email, password });
-    // 여기에 실제 로그인 로직 (예: API 호출)을 추가합니다.
-    alert('로그인 버튼이 클릭되었습니다! (콘솔 확인)'); // 사용자에게 알림
+    
+    if(email === 'test@example.com' && password === "1234"){
+        // 슈퍼유저 로그인
+        dispatch(loginTest({id:email, password:password, loading:false, message:''}))
+    }
+    else{
+        // 로그인 체크
+        await dispatch(login({id:email, password:password, loading:false, message:''}))
+    }
   };
 
   // 회원가입 버튼 클릭 핸들러

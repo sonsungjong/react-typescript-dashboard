@@ -5,12 +5,13 @@ import Home from "./pages/Home";
 import Store from "./pages/Store";
 import Weather from "./pages/Weather";
 import Login from "./components/Login";
+import { useSelector } from "react-redux";
 
 export default function App() {
 
-  const [isLogin, setIsLogin] = useState(false);    // 처음에는 로그인X
+  let {user} = useSelector((state:any) => state.auth)
 
-  if(isLogin == false){
+  if(user?.id === ''){
     // 로그인 화면
     return(
       <Login />
