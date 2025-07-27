@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, loginTest } from '../store/slices/AccountSlice';
 import type { IUser } from '../model/AccountModel';
 import type { AppDispatch, RootState } from '../store/store';
+import { Star } from 'lucide-react';
 
 // 로그인 및 회원가입 컴포넌트
 export default function Login(){
@@ -54,15 +55,7 @@ export default function Login(){
       <div className="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md">
         {/* 로고 섹션 */}
         <div className="flex flex-col items-center mb-8">
-          {/* Grafana 로고 이미지 (placeholder) */}
-          <img
-            src="https://placehold.co/100x100/F472B6/FFFFFF?text=로고" // 임시 로고 이미지
-            alt="Grafana 로고"
-            className="w-24 h-24 mb-4 rounded-full"
-            onError={(e) => {
-              e.currentTarget.src = 'https://placehold.co/100x100/F472B6/FFFFFF?text=로고'; // 이미지 로드 실패 시 대체 이미지
-            }}
-          />
+          <Star className='w-24 h-24 text-white' />
           <h1 className="text-white text-3xl font-bold">Project에 오신 것을 환영합니다</h1>
         </div>
 

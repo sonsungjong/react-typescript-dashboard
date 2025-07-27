@@ -1,14 +1,21 @@
 // 아이콘 npm install react-icons lucide-react
 
 import { useState } from "react"
-import { ChevronsLeft, ChevronsRight, Home, LayoutDashboard, Store, Sun } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, Home, LayoutDashboard, LogOut, Store, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/slices/AccountSlice";
 
 // 열리고 닫히는 사이드바 컴포넌트
 export default function Sidebar()
 {
     // 창이 열리고 닫히는 상태를 관리할 state변수
     const [isOpen, setIsOpen] = useState(true);         // true : 열려있음 , false : 닫혀있음
+    const dispatch = useDispatch();         // 리덕스 함수 사용
+
+    function hLogout(){
+        dispatch(logout())
+    }
 
     return(
         <div className={`h-screen bg-gray-900 transform transition-all duration-300 ease-in-out
@@ -56,6 +63,20 @@ export default function Sidebar()
                     {isOpen ? (<span>날씨 정보</span>) : null}
                 </Link>
             </nav>
+            {/* 로그아웃 버튼 (가장 하단에 위치) */}
+            <div className="p-4 mt-auto"> {/* mt-auto를 사용하여 하단으로 밀어냄 */}
+                <button
+                    className="flex items-center justify-center w-full px-4 py-3
+                                bg-red-600 hover:bg-red-700 active:bg-red-800
+                                text-white font-semibold rounded-lg shadow-md
+                                transition-all duration-200 ease-in-out
+                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75"
+                    onClick={hLogout}
+                >
+                    <LogOut className="w-5 h-5" />
+                    {isOpen ? (<span>로그아웃</span>) : null}
+                </button>
+            </div>
         </div>
     )
 }
