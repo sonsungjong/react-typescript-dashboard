@@ -18,29 +18,30 @@ let initialState : { user : IUser } = {
 // 두번째 인자 : 비동기로 실행할 함수
 export const login = createAsyncThunk('auth/login', 
     async (data : IUser)=>{
+       let email = data.id;
+       let password = data.password;
+       let id : string = '';
 
-        let email = data.id;
-        let password = data.password;
-
-        const res = await fetch('http://localhost:3000/api/signin', {
-            method:'POST',          // 요청방식 POST
-            headers: {'Content-Type': 'application/json'},      // JSON 형태로 전달
-            body: JSON.stringify({'email':email, 'password':password}),                         // JSON 형태로 전달
-        });
-
-        let id : string = '';
-    
-        if(res.ok){
-            const data = await res.json();
-            console.log('서버응답: ',data);
-
-            let email : string | null = data.email;
-            id = data.token;
-        }
-        else{
-            const data = await res.json();
-            let err = data.error;
-            alert(err)
+        try{
+            const res = await fetch('http://localhost:3000/api/signin', {
+                method:'POST',          // 요청방식 POST
+                headers: {'Content-Type': 'application/json'},      // JSON 형태로 전달
+                body: JSON.stringify({'email':email, 'password':password}),                         // JSON 형태로 전달
+            });  
+        
+            if(res.ok){
+                const data = await res.json();
+                console.log('서버응답: ',data);
+                let email : string | null = data.email;
+                id = data.token;
+            }
+            else{
+                const data = await res.json();
+                let err = data.error;
+                alert(err)
+            }
+        }catch(error){
+            alert('ERROR')
         }
         
         return id;
