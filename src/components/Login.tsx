@@ -39,15 +39,41 @@ export default function Login(){
   };
 
   // 회원가입 버튼 클릭 핸들러
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 기본 동작 방지
     if (password !== confirmPassword) {
       alert('비밀번호가 일치하지 않습니다.'); // 비밀번호 불일치 시 알림
       return;
     }
     console.log('회원가입 시도:', { email, password });
-    // 여기에 실제 회원가입 로직 (예: API 호출)을 추가합니다.
-    alert('회원가입 버튼이 클릭되었습니다! (콘솔 확인)'); // 사용자에게 알림
+    
+    // fetch를 사용할거니까 async function (await 사용을 위해서)
+    try{
+      let res = await fetch("http://localhost:3000/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",  // JSON으로 보낼 것임을 명시
+        },
+        body: JSON.stringify({               // 실제로 전송할 payload
+          email,
+          password,
+        }),
+      });
+
+      if(res.ok)
+      {
+        // 2xx
+        let data = await res.json();
+        console.log(data);
+        alert("회원가입에 성공했습니다")
+        setIsLogin(true);         // 로그인 화면
+      }else{
+        // 실패
+        alert("회원가입에 실패했습니다")
+      }
+    }catch(error){
+      alert("회원가입에 실패했습니다")
+    }
   };
 
   return (
@@ -293,7 +319,7 @@ export default function Login(){
             {/* 회원가입 버튼 */}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+              className="cursor-pointer w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
             >
               회원가입
             </button>
