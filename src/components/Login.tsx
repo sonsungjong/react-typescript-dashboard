@@ -65,6 +65,11 @@ export default function Login(){
         // 2xx
         let data = await res.json();
         console.log(data);
+
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+
         alert("회원가입에 성공했습니다")
         setIsLogin(true);         // 로그인 화면
       }else{

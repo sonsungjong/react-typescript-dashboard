@@ -18,18 +18,34 @@ let initialState : { user : IUser } = {
 // 두번째 인자 : 비동기로 실행할 함수
 export const login = createAsyncThunk('auth/login', 
     async (data : IUser)=>{
-    const res = await fetch('http://localhost:3000/api/login', {
-        method:'POST',          // 요청방식 POST
-        headers: {'Content-Type': 'application/json'},      // JSON 형태로 전달
-        body: JSON.stringify(data),                         // JSON 형태로 전달
-    });
-    
-    console.log('서버로 전송: ', data);
-    const result = await res.json();
-    console.log('서버응답: ',result);
 
-    return result.user;
-});
+        let email = data.id;
+        let password = data.password;
+
+        const res = await fetch('http://localhost:3000/api/signin', {
+            method:'POST',          // 요청방식 POST
+            headers: {'Content-Type': 'application/json'},      // JSON 형태로 전달
+            body: JSON.stringify({'email':email, 'password':password}),                         // JSON 형태로 전달
+        });
+
+        let id : string = '';
+    
+        if(res.ok){
+            const data = await res.json();
+            console.log('서버응답: ',data);
+
+            let email : string | null = data.email;
+            id = data.token;
+        }
+        else{
+            const data = await res.json();
+            let err = data.error;
+            alert(err)
+        }
+        
+        return id;
+    }
+);
 
 // 비동기로 전송하는 함수 ==> 슬라이스에서 extraRedcuer
 
@@ -81,14 +97,19 @@ const slice = createSlice({
         .addCase(
             // login 거절됬을때 사용시킬 함수
             login.rejected,(state, action)=>{
+                console.log('FAILED');
                 state.user.loading = false;
             }
         )
         .addCase(
             // login 성공했을때 사용시킬 함수
             login.fulfilled, (state, action)=>{
-                state.user = action.payload;
+                console.log(action.payload);
+
+                state.user.id = action.payload;
                 state.user.loading = false;
+                state.user.password = ''
+                state.user.message = ''
 
                 // 세션스토리지나 로컬스트로지는 보통 JSON형태로 저장을 한다
                 // 로그인 정보는 웹창을 닫았을 때 제거가 되어야하기 때문에 로컬스토리지가 아닌 세션스토리지에 저장
