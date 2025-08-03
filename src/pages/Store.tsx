@@ -44,8 +44,7 @@ interface IStoreData
 }
 
 export default function Store(){
-
-    //const [storeList, setStoreList] = useState<>([]);
+    const [storeList, setStoreList] = useState<IStoreData[]>([]);
 
     async function handleGetStore(){
         // 여기서 fetch해서 받아오기
@@ -53,14 +52,18 @@ export default function Store(){
         let data = await res.json();
 
         console.log(data)
+
+        // state에 저장
+        if(data.body?.items && data.body?.items.length > 0){
+            setStoreList(data.body?.items);
+        }
     }
 
     return(
         <div className="flex flex-col justify-center items-center">
-
             <button className="bg-purple-500 hover:bg-purple-400 p-2 cursor-pointer"
             onClick={handleGetStore}>상가정보 받아오기</button>
-
+            <p>{storeList.length}</p>
         </div>
     )
 }
