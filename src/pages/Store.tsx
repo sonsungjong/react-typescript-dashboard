@@ -1,36 +1,66 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-interface Store
+interface IStoreData
 {
-    상호명 : string;
-    상권업종대분류명 : string;
-    법정동명 : string;
-    도로명 : string;
-    경도 : number;
-    위도 : number;
+    adongCd : string
+    adongNm : string
+    bizesId : string
+    bizesNm : string
+    bldMngNo : string
+    bldMnno : number
+    bldNm : string
+    bldSlno : string
+    brchNm : string
+    ctprvnCd : string
+    ctprvnNm : string
+    dongNo : string
+    flrNo : string
+    hoNo : string
+    indsLclsCd : string
+    indsLclsNm : string
+    indsMclsCd : string
+    indsMclsNm : string
+    indsSclsCd : string
+    indsSclsNm : string
+    ksicCd : string
+    ksicNm : string
+    lat : number
+    ldongCd : string
+    ldongNm : string
+    lnoAdr : string
+    lnoCd : string
+    lnoMnno : number
+    lnoSlno : number
+    lon : number
+    newZipcd : string
+    oldZipcd : string
+    plotSctCd : string
+    plotSctNm : string
+    rdnm : string
+    rdnmAdr : string
+    rdnmCd : string
+    signguCd : string
+    signguNm : string
 }
 
 export default function Store(){
 
-    const [stores, setStores] = useState<Store[]>([]);
+    //const [storeList, setStoreList] = useState<>([]);
 
-    useEffect(()=>{
-    // http://localhost:3000/api/store/incheon 로 get요청
-    async function fetchStores(){
-      let res = await fetch('http://localhost:3000/api/store/incheon');
-      let data = await res.json();
+    async function handleGetStore(){
+        // 여기서 fetch해서 받아오기
+        let res = await fetch('https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInDong?serviceKey=IutNHOj6m80UZSIGCtN0PqM1VAJ2fky%2BhPh6pSHWgy1dAqtZ6WhUQfh%2Bq38RPvlGxwmx1Jo%2FTsvKDBZ4FyxGfw%3D%3D&pageNo=1&numOfRows=10000&divId=signguCd&key=28237&indsLclsCd=I2&type=json')
+        let data = await res.json();
 
-      // 받아온 데이터 console.log
-      console.log(data);        // 실행중인 nextjs 에다가 REST API 요청을 해서 store정보를 리액트로 받아오자
-      setStores(data);
+        console.log(data)
     }
 
-    fetchStores();
-    }, [])
-
     return(
-        <div>
-            Store Page
+        <div className="flex flex-col justify-center items-center">
+
+            <button className="bg-purple-500 hover:bg-purple-400 p-2 cursor-pointer"
+            onClick={handleGetStore}>상가정보 받아오기</button>
+
         </div>
     )
 }
