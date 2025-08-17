@@ -5,13 +5,9 @@ import type { IUser } from "../../model/AccountModel";
 
 // initialState는 하나의 변수만
 let initialState : { user : IUser } = {
-    user : {
-        id : '',
-        password : '',
-        loading : false,
-        message: '',
-    }
-}
+    user : JSON.parse(sessionStorage.getItem('user') 
+            || '{"id":"", "password":"", "loading":false, "message":""}')
+};
 
 // *비동기*로 리덕스 동작 : async ==> 로그인 정보를 확인받는 동안 화면 멈춤을 방지하기 위해
 // 첫번째 인자 : 곂치지않는 고유이름
@@ -23,7 +19,7 @@ export const login = createAsyncThunk('auth/login',
        let id : string = '';
 
         try{
-            const res = await fetch('http://localhost:3000/api/signin', {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signin`, {
                 method:'POST',          // 요청방식 POST
                 headers: {'Content-Type': 'application/json'},      // JSON 형태로 전달
                 body: JSON.stringify({'email':email, 'password':password}),                         // JSON 형태로 전달

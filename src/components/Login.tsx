@@ -49,7 +49,7 @@ export default function Login(){
     
     // fetch를 사용할거니까 async function (await 사용을 위해서)
     try{
-      let res = await fetch("http://localhost:3000/api/signup", {
+      let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",  // JSON으로 보낼 것임을 명시

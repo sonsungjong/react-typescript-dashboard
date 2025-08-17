@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NaverMap from "../components/NaverMap/NaverMap";
 
 interface IStoreData
 {
@@ -64,6 +65,7 @@ export default function Store(){
             <button className="bg-purple-500 hover:bg-purple-400 p-2 cursor-pointer"
             onClick={handleGetStore}>상가정보 받아오기</button>
             <p>{storeList.length}</p>
+            <NaverMap />
         </div>
     )
 }
