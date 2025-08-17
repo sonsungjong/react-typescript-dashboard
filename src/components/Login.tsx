@@ -21,7 +21,7 @@ export default function Login(){
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   // 리덕스
-  let {user} = useSelector<RootState>((state) => state.auth);
+  //let {user} = useSelector<RootState>((state) => state.auth);
   let dispatch = useDispatch<AppDispatch>();
 
   // 로그인 버튼 클릭 핸들러
