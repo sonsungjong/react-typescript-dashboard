@@ -28,7 +28,6 @@ export const login = createAsyncThunk('auth/login',
             if(res.ok){
                 const data = await res.json();
                 console.log('서버응답: ',data);
-                let email : string | null = data.email;
                 id = data.token;
             }
             else{
@@ -87,13 +86,13 @@ const slice = createSlice({
         // pending(대기), fulfilled(성공), reject(거절)
         builder.addCase(
             // login 대기일때 사용시킬 함수
-            login.pending, (state, action)=>{
+            login.pending, (state)=>{
                 state.user.loading = true;
             }
         )
         .addCase(
             // login 거절됬을때 사용시킬 함수
-            login.rejected,(state, action)=>{
+            login.rejected,(state)=>{
                 console.log('FAILED');
                 state.user.loading = false;
             }

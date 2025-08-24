@@ -27,7 +27,7 @@ export default function KakaoMap()
 {
     // 위험 (일반 사용자도 웹에서 볼 수 있음)
     // .env 에 있는 내용을 가져다 씀
-    const kakao_api_key = process.env.NEXT_PUBLIC_KAKAO_MAP;
+    const kakao_api_key = import.meta.env.NEXT_PUBLIC_KAKAO_MAP;
 
     // 리액트에 그림을 그리기 위해서 useRef (지도를 div에 연결)
     let mapRef = useRef<HTMLDivElement>(null);

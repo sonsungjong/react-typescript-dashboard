@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";

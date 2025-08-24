@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 // 그래프 라이브러리
 // npm install --save chart.js react-chartjs-2
-import { Chart as ChartJS, defaults, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend } from "chart.js/auto";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend } from "chart.js/auto";
 import { Bar, Line } from "react-chartjs-2";
 import { SunDim, CloudSun, Cloud, CloudRain, CloudDrizzle, CloudSnow } from 'lucide-react';
 
@@ -96,13 +96,13 @@ const getWeatherIcon = (skyValue: string, ptyValue: string) => {
 }
 
 export default function Weather(){
-    const [fcstData, setFcstData]= useState<IForecast[]>([]);           // 여기에다가 기상청 데이터 저장
+    const [_, setFcstData]= useState<IForecast[]>([]);           // 여기에다가 기상청 데이터 저장
     const [fcstView, setFcstView] = useState<IForecastView[]>([]);          // 보여주기를 위한 기상청 데이터
     const [groupedFcstView, setGroupedFcstView] = useState<IGroupedForecast>({});
     const [selectedRegion, setSelectedRegion] = useState('인천');
     const [nx, setNx] = useState(regions['인천'].nx);
     const [ny, setNy] = useState(regions['인천'].ny);
-    const [pageNo, setPageNo] = useState(1);
+    const [pageNo] = useState(1);
     const [baseDate, setBaseDate] = useState(getYesterdayForDisplay());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

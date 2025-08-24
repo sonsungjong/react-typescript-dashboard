@@ -47,9 +47,9 @@ export default function Store() {
     const [storeList, setStoreList] = useState<IStoreData[]>([]);
     const [pageNo, setPageNo] = useState(1);
     const [signguCd, setSignguCd] = useState('28237');
-    const [indsLclsCd, setIndsLclsCd] = useState('I2');
-    const [ldongCd, setLdongCd] = useState('');
-    const [numOfRows, setNumOfRows] = useState(100);
+    const [indsLclsCd] = useState('I2');
+    const [ldongCd] = useState('');
+    const [numOfRows] = useState(100);
     const [totalCount, setTotalCount] = useState(0); // totalCount 상태 추가
 
     const handleGetStore = async (page: number) => {

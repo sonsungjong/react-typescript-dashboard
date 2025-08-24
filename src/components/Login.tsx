@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login, loginTest } from '../store/slices/AccountSlice';
-import type { IUser } from '../model/AccountModel';
-import type { AppDispatch, RootState } from '../store/store';
+import type { AppDispatch } from '../store/store';
 import { Star } from 'lucide-react';
 
 // 로그인 및 회원가입 컴포넌트
