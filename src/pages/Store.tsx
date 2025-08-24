@@ -47,11 +47,14 @@ interface IStoreData
 
 export default function Store(){
     const [storeList, setStoreList] = useState<IStoreData[]>([]);
+    const [pageNo, setPageNo] = useState(1);
+    const [key, setKey] = useState(28237);
+    const [indsLclsCd, setIndsLclsCd] = useState('I2');
 
     async function handleGetStore(){
         // 여기서 fetch해서 받아오기
         // import.meta.env.VITE_GOV_API_KEY
-        let res = await fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInDong?serviceKey=${import.meta.env.VITE_GOV_API_KEY}&pageNo=1&numOfRows=10000&divId=signguCd&key=28237&indsLclsCd=I2&type=json`)
+        let res = await fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInDong?serviceKey=${import.meta.env.VITE_GOV_API_KEY}&pageNo=${pageNo}&numOfRows=10000&divId=signguCd&key=${key}&indsLclsCd=${indsLclsCd}&type=json`)
         let data = await res.json();
 
         console.log(data)
@@ -68,6 +71,9 @@ export default function Store(){
             onClick={handleGetStore}>상가정보 받아오기</button>
             <p>{storeList.length}</p>
             <NaverMapStore stores={storeList} />
+
+
+
         </div>
     )
 }
