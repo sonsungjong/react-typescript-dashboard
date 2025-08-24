@@ -28,7 +28,7 @@ export default function Sidebar()
                 
                 <div className="flex items-center flex-grow">
                     <Home className="h-6 w-6 mr-2" />
-                    {isOpen ? (<h2 className="whitespace-nowrap">프로젝트 제목</h2>) : null}
+                    {isOpen ? (<h2 className="whitespace-nowrap">나의 대시보드</h2>) : null}
                 </div>
 
                 {/* 토글 버튼 */}
@@ -52,7 +52,7 @@ export default function Sidebar()
                 {/* 사이드바 메뉴 항목 */}
                 <Link to="/" className="flex items-center p-4">
                     <LayoutDashboard className="w-5 h-5 mr-2"></LayoutDashboard>
-                    {isOpen ? (<span>대시보드</span>) : null}
+                    {isOpen ? (<span>ChatGPT 채팅</span>) : null}
                 </Link>
                 <Link to="/store" className="flex items-center p-4">
                     <Store className="w-5 h-5 mr-2"></Store>
