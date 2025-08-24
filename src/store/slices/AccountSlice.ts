@@ -102,16 +102,18 @@ const slice = createSlice({
             // login 성공했을때 사용시킬 함수
             login.fulfilled, (state, action)=>{
                 console.log(action.payload);
-
+                
+                
                 state.user.id = action.payload;
                 state.user.loading = false;
                 state.user.password = ''
                 state.user.message = ''
+                console.log(state.user.id);
 
                 // 세션스토리지나 로컬스트로지는 보통 JSON형태로 저장을 한다
                 // 로그인 정보는 웹창을 닫았을 때 제거가 되어야하기 때문에 로컬스토리지가 아닌 세션스토리지에 저장
                 // 새로고침을 하면 정보가 날라가서 새로고침 완료되면 세션스토리지에서 다시 받아오기
-                sessionStorage.setItem('user', JSON.stringify(action.payload));
+                sessionStorage.setItem('user', JSON.stringify(state.user));
             }
         )
     }

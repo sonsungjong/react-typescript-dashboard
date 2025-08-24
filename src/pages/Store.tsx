@@ -1,5 +1,6 @@
 import { useState } from "react";
 import NaverMap from "../components/NaverMap/NaverMap";
+import NaverMapStore from "../components/NaverMap/NaverMapStore";
 
 interface IStoreData
 {
@@ -49,7 +50,8 @@ export default function Store(){
 
     async function handleGetStore(){
         // 여기서 fetch해서 받아오기
-        let res = await fetch('https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInDong?serviceKey=IutNHOj6m80UZSIGCtN0PqM1VAJ2fky%2BhPh6pSHWgy1dAqtZ6WhUQfh%2Bq38RPvlGxwmx1Jo%2FTsvKDBZ4FyxGfw%3D%3D&pageNo=1&numOfRows=10000&divId=signguCd&key=28237&indsLclsCd=I2&type=json')
+        // import.meta.env.VITE_GOV_API_KEY
+        let res = await fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInDong?serviceKey=${import.meta.env.VITE_GOV_API_KEY}&pageNo=1&numOfRows=10000&divId=signguCd&key=28237&indsLclsCd=I2&type=json`)
         let data = await res.json();
 
         console.log(data)
@@ -65,7 +67,7 @@ export default function Store(){
             <button className="bg-purple-500 hover:bg-purple-400 p-2 cursor-pointer"
             onClick={handleGetStore}>상가정보 받아오기</button>
             <p>{storeList.length}</p>
-            <NaverMap />
+            <NaverMapStore stores={storeList} />
         </div>
     )
 }

@@ -1,4 +1,3 @@
-"use client";
 // 리액트 관련 함수를 사용하기 위해서는 'use client' 를 파일 상단에 기록
 
 // 네이버 지도 API
@@ -21,107 +20,119 @@ declare global
     }
 }
 
-interface Store
+interface IStoreData
 {
-    상호명 : string;
-    상권업종대분류명 : string;
-    법정동명 : string;
-    도로명 : string;
-    경도 : number;
-    위도 : number;
+    adongCd : string
+    adongNm : string
+    bizesId : string
+    bizesNm : string
+    bldMngNo : string
+    bldMnno : number
+    bldNm : string
+    bldSlno : string
+    brchNm : string
+    ctprvnCd : string
+    ctprvnNm : string
+    dongNo : string
+    flrNo : string
+    hoNo : string
+    indsLclsCd : string
+    indsLclsNm : string
+    indsMclsCd : string
+    indsMclsNm : string
+    indsSclsCd : string
+    indsSclsNm : string
+    ksicCd : string
+    ksicNm : string
+    lat : number
+    ldongCd : string
+    ldongNm : string
+    lnoAdr : string
+    lnoCd : string
+    lnoMnno : number
+    lnoSlno : number
+    lon : number
+    newZipcd : string
+    oldZipcd : string
+    plotSctCd : string
+    plotSctNm : string
+    rdnm : string
+    rdnmAdr : string
+    rdnmCd : string
+    signguCd : string
+    signguNm : string
 }
 
-export default function NaverMapStore({stores} : { stores : Store[] })
-{
-    // 받아온 stores를 통해서 marker를 생성
-    // 위도 경도 마커
+export default function NaverMapStore({ stores }: { stores: IStoreData[] }) {
+  const naver_api_key = import.meta.env.VITE_NAVER_MAP;
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapObjRef = useRef<any>(null);          // map 인스턴스
+  const markersRef = useRef<any[]>([]);         // 생성된 마커 보관
 
+  useEffect(() => {
+    const initMap = () => {
+      if (!mapRef.current || !window.naver?.maps) return;
 
-    // 위험 (일반 사용자도 웹에서 볼 수 있음)
-    // .env 에 있는 내용을 가져다 씀
-    const naver_api_key = import.meta.env.VITE_NAVER_MAP;
+      // 지도 1회 생성 + 재사용
+      if (!mapObjRef.current) {
+        mapObjRef.current = new window.naver.maps.Map(mapRef.current, {
+          center: new window.naver.maps.LatLng(37.4563, 126.7052),
+          zoom: 13,
+        });
+      }
 
-    // 리액트에 그림을 그리기 위해서 useRef (지도를 div에 연결)
-    let mapRef = useRef<HTMLDivElement>(null);
+      const map = mapObjRef.current;
 
-    // NaverMap 컴포넌트가 실행되면 실행할 코드 useEffect();
+      // 기존 마커 제거
+      markersRef.current.forEach(m => m.setMap(null));
+      markersRef.current = [];
 
-    // useEffect에 [] 빈배열 넣으면 처음 한번만 그림
-    // 그린 다음에 stores가 들어오니까
-    // [stores]
-    useEffect(()=>{
-        console.log(naver_api_key);
-        const initMap = ()=>{
-            // 지도가 안그려져 있으면 그린다 (중복 그리기 방지), 로딩 전에는 안그린다
-            if(!mapRef.current || !window.naver?.maps) return;
+      // bounds 계산용
+      const bounds = new window.naver.maps.LatLngBounds();
 
-            // 네이버 지도를 그린다
-            let map = new window.naver.maps.Map(mapRef.current, {
-                // 중심좌표, 줌레벨
-                center: new window.naver.maps.LatLng(37.4563, 126.7052),
-                zoom: 13
-            })
-            
-            // stores가 안 비어있으면
-            // stores.법정동명 === '부평동' 일때만 마커찍기
-            stores
-            //.filter(store => store.법정동명 === '부평동')
-            //.filter(store => store.상권업종대분류명 === '음식')
-            .forEach(store => {
-                // 위치 설정
-                const position = new window.naver.maps.LatLng(store.위도, store.경도);
+      stores.forEach(store => {
+        if (!store.lat || !store.lon) return;
+        const position = new window.naver.maps.LatLng(store.lat, store.lon);
 
-                // 지도 위에 마커 위치
-                const marker = new window.naver.maps.Marker({
-                    map,
-                    position, // 위도 경도
-                });
+        const marker = new window.naver.maps.Marker({ map, position });
+        markersRef.current.push(marker);
+        bounds.extend(position);
 
-                // 클릭했을 때 나올 div를 만들어주고, 변수에 담아서 클릭이벤트에 담는다
-                const infoWindow = new window.naver.maps.InfoWindow({
-                    content:`
-                        <div style="color:black;padding:4px;">
-                            <strong>${store.상호명}</strong>
-                            <br/>
-                            ${store.상권업종대분류명}
-                            <br/>
-                            <span>주소명 : ${store.도로명}</span>
-                        </div>
-                    `
-                })
-                
-                // 마우스 클릭 이벤트 addEventListner
-                window.naver.maps.Event.addListener(marker, 'click', ()=>{
-                    // infoWindow 이미 있으면 없애기
-                    if(infoWindow.getMap()){
-                        infoWindow.close();
-                    }else{
-                        infoWindow.open(map, marker);
-                    }
-                });
-            });
-        }
+        const infoWindow = new window.naver.maps.InfoWindow({
+          content: `
+            <div style="color:#111;padding:6px 8px;line-height:1.4">
+              <div style="font-weight:700">${store.bizesNm || "-"}</div>
+              <div>${store.indsLclsNm || "-"} ${store.indsMclsNm || ""}</div>
+              <div style="font-size:12px;color:#555">${store.rdnmAdr || store.lnoAdr || "-"}</div>
+            </div>
+          `,
+        });
 
-        // 중복체크용 ID
-        const scriptID = 'naver-sdk-map'
-        if(!document.getElementById(scriptID)){
-            // 스크립트 태그 생성 <script></script>
-            const script = document.createElement('script')            // HTML에 생성
-            script.id = scriptID;
-            script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${naver_api_key}`
-            script.async = true;
-            script.onload=initMap;
-            document.head.appendChild(script);
-        }else{
-            initMap();
-        }
+        window.naver.maps.Event.addListener(marker, "click", () => {
+          if (infoWindow.getMap()) infoWindow.close();
+          else infoWindow.open(map, marker);
+        });
+      });
 
-    }, [stores])        // [] 은 처음 한번만 그린다
-    // [stores] : stores 바뀔때마다 그린다(useEffect)
+      // 마커가 1개 이상이면 화면을 자동으로 맞춤
+      if (stores.length > 0 && !bounds.isEmpty?.()) {
+        map.fitBounds(bounds);
+      }
+    };
 
-    return(
-        // 지도를 그릴 영역으로 선택
-        <div ref={mapRef} style={{width:'500px', height:'500px'}}>
-        </div>
-    )
+    const scriptID = "naver-sdk-map";
+    if (!document.getElementById(scriptID)) {
+      const script = document.createElement("script");
+      script.id = scriptID;
+      // ✅ 최신 파라미터: ncpKeyId
+      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${naver_api_key}`;
+      script.async = true;
+      script.onload = initMap;
+      document.head.appendChild(script);
+    } else {
+      initMap();
+    }
+  }, [stores]);
+
+  return <div ref={mapRef} style={{ width: "500px", height: "500px" }} />;
 }
